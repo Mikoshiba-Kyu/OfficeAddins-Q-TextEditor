@@ -11,7 +11,7 @@ initializeIcons()
 
 let isOfficeInitialized = false
 
-const title = "CellPad"
+const title = "PowerQueryEditor-Neo"
 
 const render = (Component) => {
   ReactDOM.render(
