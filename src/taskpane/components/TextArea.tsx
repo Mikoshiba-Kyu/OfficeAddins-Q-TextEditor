@@ -1,31 +1,20 @@
 import * as React from "react";
 import Editor from "@monaco-editor/react"
 
-/*
 export interface Props {
-    setCellValue: Function;
-    cellValue: string;
-    sheetName: string;
-    address: string;
+    theme: string;
 }
-*/
 
-const TextArea = () => {
+const TextArea = (props: Props) => {
+
     return (
         <div id="text-area">
-            <Editor
-                className="main-editor"
-                width='100%'
-                height='70vh'
-                theme='light'
-                defaultLanguage=''
-                options={{
-                    "cursorStyle":"line",
-                    "minimap": {
-                        "enabled": false
-                    },
-                    "fontFamily": "Meiryo UI"
-                }}
+            <p>{props.theme}</p>
+            <Editor 
+                width = '100%'
+                height = '82vh'
+                theme = {props.theme}
+                defaultLanguage = ''
             />
         </div>
     )

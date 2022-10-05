@@ -1,5 +1,7 @@
-import * as React from "react"
+import React, { useState } from 'react';
+import { DefaultButton, PrimaryButton } from '@fluentui/react/lib/Button';
 import TextArea from "./TextArea"
+import Header from './Header';
 
 /* global console, Excel, require  */
 const App = () => {
@@ -41,10 +43,18 @@ const App = () => {
   } 
   */
 
+  const [themeName, setThemeName] = useState('light');
+
+  const tglThemeName = () => {
+    setThemeName(themeName === 'light' ? 'vs-dark' : 'light')
+  }
+
   return (
-    <div className="ms-welcome">
-      <TextArea />
-    </div>
+    <>
+      <Header theme={themeName} />
+      <DefaultButton text="ChangeTheme" onClick={tglThemeName} allowDisabledFocus/>
+      <TextArea theme={themeName}/>
+    </>
   )
 }
 
