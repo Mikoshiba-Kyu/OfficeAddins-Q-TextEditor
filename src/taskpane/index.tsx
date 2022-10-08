@@ -11,7 +11,7 @@ initializeIcons()
 
 let isOfficeInitialized = false
 
-const title = "PowerQueryEditor-Neo"
+const title = "右のTextEditor"
 
 const render = (Component) => {
   ReactDOM.render(
