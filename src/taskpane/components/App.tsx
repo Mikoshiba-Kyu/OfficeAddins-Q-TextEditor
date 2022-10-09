@@ -8,7 +8,6 @@ import { setConfig, getConfig } from '../datastore/datastore'
 
 // FluentUIComponents
 import { Panel } from '@fluentui/react/lib/Panel'
-import { Settings } from './Settings'
 import { DefaultButton, PrimaryButton } from '@fluentui/react/lib/Button'
 
 // FluentUIHooks
@@ -18,22 +17,28 @@ import { useBoolean } from '@fluentui/react-hooks'
 import TextArea from "./TextArea"
 import Header from './Header'
 import Footer from './Footer'
+import Settings from './Settings'
 
 /* global console, Excel, require  */
 const App = () => {
 
   // Settings
-  const [themeName, setThemeName] = useState(getConfig('themeName') || 'vs-dark')
-  const [fontSize, setFontSize] = useState(getConfig('fontSize') || 20)
-  const [fontFamily, setFontFamily] = useState(getConfig('fontFamily') || 'MeiryoUI')
-  const [language, setLanguage] = useState(getConfig('language') || 'JavaScript')
+  const [theme, setTheme] = useState(getConfig('theme') || 'vs-dark')
+  const [fontSize, setFontSize] = useState(getConfig('fontSize') || 18)
+  const [fontFamily, setFontFamily] = useState(getConfig('fontFamily') || 'メイリオ')
+  const [language, setLanguage] = useState(getConfig('language') || 'javascript')
 
-
-  const monacoOptions = {
+  const monacoOptions: MonacoOptions = {
     fontSize,
-    fontFamily,
-    "colorDecorators": true,
-}
+    fontFamily
+  }
+
+  const monacoProps: MonacoProps = {
+    defaultValue: '// Default Value.',
+    language,
+    theme,
+    options: monacoOptions
+  }
 
   useEffect(() => {
 
@@ -41,7 +46,7 @@ const App = () => {
 
 
     //
-    console.log(`[dev] hello ${themeName} ${fontSize} ${fontFamily}`)
+    console.log(`[dev] hello ${theme} ${fontSize} ${fontFamily}`)
   }, []);
 
     /*
@@ -52,15 +57,6 @@ const App = () => {
     console.log(`[dev] setThemeName : ${themeName}`)
   */
 
-  const onSetConfig = (propertyName, propertyValue) => {
-    setConfig(propertyName, propertyValue)
-  }
-
-  const onGetConfig = () => {
-    setConfig('test', 'テスト値')
-    getConfig('test')
-  }
-
   const buttonStyles = { root: { marginRight: 8 } };
 
   const [isOpen, { setTrue: openPanel, setFalse: dismissPanel }] = useBoolean(false);
@@ -70,10 +66,7 @@ const App = () => {
   const onRenderFooterContent = React.useCallback(
     () => (
       <div>
-        <PrimaryButton onClick={dismissPanel} styles={buttonStyles}>
-            Save
-        </PrimaryButton>
-        <DefaultButton onClick={dismissPanel}>Cancel</DefaultButton>
+        <DefaultButton onClick={dismissPanel}>Close</DefaultButton>
       </div>
     ),
     [dismissPanel],
@@ -82,22 +75,43 @@ const App = () => {
   return (
     <>
       <Header openPanel={openPanel} />
-      <TextArea theme={themeName} monacoOptions={monacoOptions}/>
+      <TextArea monacoProps={monacoProps} />
       <Panel
         isOpen={isOpen}
         onDismiss={dismissPanel}
-        headerText="Panel with footer at bottom"
+        headerText="設定"
         closeButtonAriaLabel="Close"
         onRenderFooterContent={onRenderFooterContent}
         // Stretch panel content to fill the available height so the footer is positioned
         // at the bottom of the page
         isFooterAtBottom={true}
       >
-        <Settings />
+        <Settings monacoProps={monacoProps} setLanguage={setLanguage}/>
       </Panel>
-      <Footer language={language} setLanguage={setLanguage}/>
+      <Footer monacoProps={monacoProps} />
     </>
   )
 }
 
 export default App
+
+export type MonacoProps = {
+  defaultValue?: string
+  defaultLanguage?: string
+  defaultPath?: string
+  value?: string
+  language?: string
+  path?: string
+  theme?: string
+  line?: number
+  options?: MonacoOptions
+  overrideServices?: object
+  saveViewState?: boolean
+  keepCurrentModel?: boolean
+  wrapperProps?: object
+}
+
+export type MonacoOptions = {
+  fontSize : number | string
+  fontFamily: string
+}

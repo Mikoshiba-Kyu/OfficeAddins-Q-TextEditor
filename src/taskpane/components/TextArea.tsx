@@ -6,10 +6,10 @@
 
 import * as React from "react";
 import Editor from "@monaco-editor/react"
+import type { MonacoProps } from './App'
 
 export interface Props {
-	theme: string
-	monacoOptions: any
+	monacoProps: MonacoProps
 }
 
 const TextArea = (props: Props) => {
@@ -28,14 +28,14 @@ const TextArea = (props: Props) => {
 	return (
 		<div className="monaco-editor">
 			<Editor 
-				theme = {props.theme}
-				defaultLanguage = 'javascript'
-				language = 'javascript'
+				theme = {props.monacoProps.theme}
+				language = {props.monacoProps.language}
+				defaultValue = {props.monacoProps.defaultValue}
 				width = '100%'
 				height = 'calc(100vh - 2rem - 1.2rem)'
 				beforeMount={handleEditorWillMount}
 				onValidate={handleEditorValidation}
-				options = {props.monacoOptions}
+				options = {props.monacoProps.options as any}
 		/>
 		</div>
 	)
