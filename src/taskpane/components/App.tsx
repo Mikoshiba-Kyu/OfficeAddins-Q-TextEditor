@@ -1,7 +1,6 @@
 // React
 import * as React from 'react'
-import { useEffect }  from 'react'
-import { useState } from 'react'
+import { useEffect, useState }  from 'react'
 
 // DataStore
 import { setConfig, getConfig } from '../datastore/datastore'
@@ -14,8 +13,7 @@ import { DefaultButton, PrimaryButton } from '@fluentui/react/lib/Button'
 import { useBoolean } from '@fluentui/react-hooks'
 
 // ComponentFiles
-import TextArea from "./TextArea"
-import Header from './Header'
+import TextArea from './TextArea'
 import Footer from './Footer'
 import Settings from './Settings'
 
@@ -23,28 +21,12 @@ import Settings from './Settings'
 const App = () => {
 
   // Settings
-  const [theme, setTheme] = useState(getConfig('theme') || 'vs-dark')
-  const [fontSize, setFontSize] = useState(getConfig('fontSize') || 18)
-  const [fontFamily, setFontFamily] = useState(getConfig('fontFamily') || 'メイリオ')
-  const [language, setLanguage] = useState(getConfig('language') || 'javascript')
-
-  const monacoOptions: MonacoOptions = {
-    fontSize,
-    fontFamily
-  }
-
-  const monacoProps: MonacoProps = {
-    defaultValue: '// Default Value.',
-    language,
-    theme,
-    options: monacoOptions
-  }
+  const [theme, setTheme] = useState('light')
+  const [fontSize, setFontSize] = useState(18)
+  const [fontFamily, setFontFamily] = useState('メイリオ')
+  const [language, setLanguage] = useState('javascript')
 
   useEffect(() => {
-
-    // Settingsを取得する
-
-
     //
     console.log(`[dev] hello ${theme} ${fontSize} ${fontFamily}`)
   }, []);
@@ -57,12 +39,8 @@ const App = () => {
     console.log(`[dev] setThemeName : ${themeName}`)
   */
 
-  const buttonStyles = { root: { marginRight: 8 } };
-
+  // サイドパネル
   const [isOpen, { setTrue: openPanel, setFalse: dismissPanel }] = useBoolean(false);
-
-  // This panel doesn't actually save anything; the buttons are just an example of what
-  // someone might want to render in a panel footer.
   const onRenderFooterContent = React.useCallback(
     () => (
       <div>
@@ -74,8 +52,12 @@ const App = () => {
 
   return (
     <>
-      <Header openPanel={openPanel} />
-      <TextArea monacoProps={monacoProps} />
+      <TextArea 
+        theme={theme}
+        language={language}
+        fontSize={fontSize as number}
+        fontFamily={fontFamily}
+      />
       <Panel
         isOpen={isOpen}
         onDismiss={dismissPanel}
@@ -86,9 +68,22 @@ const App = () => {
         // at the bottom of the page
         isFooterAtBottom={true}
       >
-        <Settings monacoProps={monacoProps} setLanguage={setLanguage}/>
+        <Settings 
+          theme={theme}
+          language={language}
+          fontSize={fontSize as number}
+          fontFamily={fontFamily}
+          setTheme={setTheme}
+          setLanguage={setLanguage}
+        />
       </Panel>
-      <Footer monacoProps={monacoProps} />
+      <Footer 
+        theme={theme}
+        language={language}
+        fontSize={fontSize as number}
+        fontFamily={fontFamily}
+        openPanel={openPanel}
+      />
     </>
   )
 }
