@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { Dropdown, IDropdownOption, IDropdownStyles } from '@fluentui/react/lib/Dropdown'
 import { ChoiceGroup, IChoiceGroupOption } from '@fluentui/react/lib/ChoiceGroup'
+import { Slider } from '@fluentui/react'
+
 
 // ----------------- テーマ -----------------
 const themeOptions: IChoiceGroupOption[] = [
@@ -46,7 +48,9 @@ const languageListStyle: Partial<IDropdownStyles> = {
 		fontSize: 16
 	}
 }
-// ----------------------------------------
+
+// ----------------- フォントサイズ -----------------
+
 
 export interface Props {
 	theme: string
@@ -55,21 +59,31 @@ export interface Props {
 	fontFamily: string
 	setTheme
 	setLanguage
+	setFontSize
 }
 
 const Settings = (props: Props) => {
 
+	// テーマ
 	const [selectedKey, setSelectedKey] = React.useState<string | undefined>(props.theme)
 	const onThemeChange = React.useCallback((_event: React.SyntheticEvent<HTMLElement>, option: IChoiceGroupOption) => {
 		setSelectedKey(option.key)
 		props.setTheme(option.key)
 	}, [])
 
+	// 言語
 	const [selectedLanguage, setSelectedLanguage] = React.useState<IDropdownOption>()
 	const onLanguageChange = (_event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void => {
 		setSelectedLanguage(item)
 		props.setLanguage(item.key)
 	}
+
+	// フォントサイズ
+	const [fontSize, setFontSize] = React.useState(props.fontSize);
+  const onFontSizeChange = (value: number) => {
+	setFontSize(value)
+	props.setFontSize(value)
+  }
 
 	return (
 		<>
@@ -88,6 +102,16 @@ const Settings = (props: Props) => {
 				styles={languageListStyle}
 				onChange={onLanguageChange}
 			/>
+			<Slider
+				label="フォントサイズ"
+				min={8}
+				max={36}
+				step={2}
+				defaultValue={props.fontSize}
+				value={fontSize}
+				onChange={onFontSizeChange}
+				showValue
+				snapToStep />
 		</>
 	)
 }

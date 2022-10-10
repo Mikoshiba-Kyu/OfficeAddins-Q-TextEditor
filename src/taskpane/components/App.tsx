@@ -21,10 +21,10 @@ import Settings from './Settings'
 const App = () => {
 
   // Settings
-  const [theme, setTheme] = useState('light')
-  const [fontSize, setFontSize] = useState(18)
-  const [fontFamily, setFontFamily] = useState('メイリオ')
-  const [language, setLanguage] = useState('javascript')
+  const [theme, setTheme] = useState<string>('light')
+  const [fontSize, setFontSize] = useState<number>(18)
+  const [fontFamily, setFontFamily] = useState<string>('メイリオ')
+  const [language, setLanguage] = useState<string>('javascript')
 
   useEffect(() => {
     //
@@ -64,23 +64,22 @@ const App = () => {
         headerText="設定"
         closeButtonAriaLabel="Close"
         onRenderFooterContent={onRenderFooterContent}
-        // Stretch panel content to fill the available height so the footer is positioned
-        // at the bottom of the page
         isFooterAtBottom={true}
       >
         <Settings 
           theme={theme}
           language={language}
-          fontSize={fontSize as number}
+          fontSize={fontSize}
           fontFamily={fontFamily}
           setTheme={setTheme}
           setLanguage={setLanguage}
+          setFontSize={setFontSize}
         />
       </Panel>
       <Footer 
         theme={theme}
         language={language}
-        fontSize={fontSize as number}
+        fontSize={fontSize}
         fontFamily={fontFamily}
         openPanel={openPanel}
       />
