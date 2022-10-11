@@ -22,9 +22,11 @@ const App = () => {
 
   // Settings
   const [theme, setTheme] = useState<string>('light')
-  const [fontSize, setFontSize] = useState<number>(18)
-  const [fontFamily, setFontFamily] = useState<string>('"Source Code Pro", "Sawarabi Gothic", monospace')
   const [language, setLanguage] = useState<string>('javascript')
+  const [fontFamily, setFontFamily] = useState<string>('"Source Code Pro", "Sawarabi Gothic", monospace')
+  const [fontSize, setFontSize] = useState<number>(18)
+  const [tabSize, setTabSize] = useState<number>(4)
+
 
   useEffect(() => {
     //
@@ -47,8 +49,9 @@ const App = () => {
       <TextArea 
         theme={theme}
         language={language}
-        fontSize={fontSize as number}
+        fontSize={fontSize}
         fontFamily={fontFamily}
+        tabSize={tabSize}
       />
       <Panel
         isOpen={isOpen}
@@ -60,20 +63,23 @@ const App = () => {
       >
         <Settings 
           theme={theme}
-          language={language}
-          fontSize={fontSize}
-          fontFamily={fontFamily}
           setTheme={setTheme}
+          language={language}
           setLanguage={setLanguage}
+          fontFamily={fontFamily}
           setFontFamily={setFontFamily}
+          fontSize={fontSize}
           setFontSize={setFontSize}
+          tabSize={tabSize}
+          setTabSize={setTabSize}
         />
       </Panel>
       <Footer 
         theme={theme}
         language={language}
-        fontSize={fontSize}
         fontFamily={fontFamily}
+        fontSize={fontSize}
+        tabSize={tabSize}
         openPanel={openPanel}
       />
     </>
@@ -81,24 +87,3 @@ const App = () => {
 }
 
 export default App
-
-export type MonacoProps = {
-  defaultValue?: string
-  defaultLanguage?: string
-  defaultPath?: string
-  value?: string
-  language?: string
-  path?: string
-  theme?: string
-  line?: number
-  options?: MonacoOptions
-  overrideServices?: object
-  saveViewState?: boolean
-  keepCurrentModel?: boolean
-  wrapperProps?: object
-}
-
-export type MonacoOptions = {
-  fontSize : number | string
-  fontFamily: string
-}

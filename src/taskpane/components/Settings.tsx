@@ -60,13 +60,15 @@ const listStyle: Partial<IDropdownStyles> = {
 
 export interface Props {
 	theme: string
-	language: string
-	fontSize: number
-	fontFamily: string
 	setTheme
+	language: string
 	setLanguage
+	fontFamily: string
 	setFontFamily
+	fontSize: number
 	setFontSize
+	tabSize: number
+	setTabSize
 }
 
 const Settings = (props: Props) => {
@@ -97,6 +99,13 @@ const Settings = (props: Props) => {
 	const onFontSizeChange = (value: number) => {
 		setFontSize(value)
 		props.setFontSize(value)
+	}
+
+	// タブサイズ
+	const [tabSize, setTabSize] = React.useState(props.fontSize);
+	const onTabSizeChange = (value: number) => {
+		setTabSize(value)
+		props.setTabSize(value)
 	}
 
 	return (
@@ -137,7 +146,20 @@ const Settings = (props: Props) => {
 				value={fontSize}
 				onChange={onFontSizeChange}
 				showValue
-				snapToStep />
+				snapToStep
+			/>
+			<Spacer size='2rem'></Spacer>
+			<Slider
+				label="Tabサイズ"
+				min={2}
+				max={4}
+				step={2}
+				defaultValue={props.tabSize}
+				value={tabSize}
+				onChange={onTabSizeChange}
+				showValue
+				snapToStep
+			/>
 		</>
 	)
 }

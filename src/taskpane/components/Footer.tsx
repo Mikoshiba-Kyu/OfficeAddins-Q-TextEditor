@@ -1,12 +1,13 @@
-import * as React from "react";
+import * as React from "react"
 import { DefaultPalette, Stack, IStackStyles, IStackItemStyles } from '@fluentui/react'
 import { BaseButton, ActionButton } from '@fluentui/react/lib/Button'
 
 export interface Props {
 	theme: string
 	language: string
-	fontSize: number
 	fontFamily: string
+	fontSize: number
+	tabSize: number
 	openPanel: React.MouseEventHandler<HTMLAnchorElement | HTMLButtonElement | HTMLDivElement | HTMLSpanElement | BaseButton>
 }
 
@@ -39,7 +40,7 @@ const Footer = (props: Props) => {
 				<ActionButton styles={stackItemStyles}>{`フォントサイズ  :  ${props.fontSize}`}</ActionButton>
 			</Stack.Item>
 			<Stack.Item styles={stackItemStyles}>
-				<ActionButton styles={stackItemStyles}>{`スペース  :  2`}</ActionButton>
+				<ActionButton styles={stackItemStyles}>{`Tabサイズ  :  ${props.tabSize}`}</ActionButton>
 			</Stack.Item>
 			<Stack.Item styles={stackItemStyles}>
 				<ActionButton styles={stackItemStyles}>{`UTF-8`}</ActionButton>

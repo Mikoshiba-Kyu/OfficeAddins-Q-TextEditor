@@ -10,8 +10,9 @@ import Editor from "@monaco-editor/react"
 export interface Props {
 	theme: string
 	language: string
-	fontSize: number
 	fontFamily: string
+	fontSize: number
+	tabSize: number
 }
 
 const TextArea = (props: Props) => {
@@ -37,7 +38,7 @@ const TextArea = (props: Props) => {
 				height = 'calc(100vh - 1.2rem)'
 				beforeMount={handleEditorWillMount}
 				onValidate={handleEditorValidation}
-				options = {{ fontFamily: props.fontFamily, fontSize: props.fontSize }}
+				options = {{ fontFamily: props.fontFamily, fontSize: props.fontSize, tabSize: props.tabSize}}
 		/>
 		</div>
 	)
