@@ -1,7 +1,8 @@
-import * as React from 'react';
+import * as React from 'react'
 import { Dropdown, IDropdownOption, IDropdownStyles } from '@fluentui/react/lib/Dropdown'
 import { ChoiceGroup, IChoiceGroupOption } from '@fluentui/react/lib/ChoiceGroup'
 import { Slider } from '@fluentui/react'
+import { Spacer } from './Spacer'
 
 
 // ----------------- テーマ -----------------
@@ -43,14 +44,19 @@ const languageList = [
 	{key: 'objective-c', text: 'Objective-C'}
 ]
 
-const languageListStyle: Partial<IDropdownStyles> = {
+// ----------------- フォントファミリー -----------------
+const fontFamilyList = [
+	{ key: '"Robot Mono", "Sawarabi Gothic", monospace', text: 'Robot Mono' },
+	{ key: '"Source Code Pro", "Sawarabi Gothic", monospace', text: 'Source Code Pro' },
+	{ key: '"Anonymous Pro", "Sawarabi Gothic", monospace', text: 'Anonymous Pro' },
+	{ key: '"Ubuntu Mono", "Sawarabi Gothic", monospace', text: 'Ubuntu Mono' }
+]
+
+const listStyle: Partial<IDropdownStyles> = {
 	dropdown: {
 		fontSize: 16
 	}
 }
-
-// ----------------- フォントサイズ -----------------
-
 
 export interface Props {
 	theme: string
@@ -59,15 +65,16 @@ export interface Props {
 	fontFamily: string
 	setTheme
 	setLanguage
+	setFontFamily
 	setFontSize
 }
 
 const Settings = (props: Props) => {
 
 	// テーマ
-	const [selectedKey, setSelectedKey] = React.useState<string | undefined>(props.theme)
+	const [selectedTheme, setSelectedTheme] = React.useState<string | undefined>(props.theme)
 	const onThemeChange = React.useCallback((_event: React.SyntheticEvent<HTMLElement>, option: IChoiceGroupOption) => {
-		setSelectedKey(option.key)
+		setSelectedTheme(option.key)
 		props.setTheme(option.key)
 	}, [])
 
@@ -78,30 +85,49 @@ const Settings = (props: Props) => {
 		props.setLanguage(item.key)
 	}
 
+	// フォントファミリー
+	const [selectedFontFamily, setSelectedFontFamily] = React.useState<IDropdownOption>()
+	const onFontFamilyChange = (_event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void => {
+		setSelectedFontFamily(item)
+		props.setFontFamily(item.key)
+	}
+
 	// フォントサイズ
 	const [fontSize, setFontSize] = React.useState(props.fontSize);
-  const onFontSizeChange = (value: number) => {
-	setFontSize(value)
-	props.setFontSize(value)
-  }
+	const onFontSizeChange = (value: number) => {
+		setFontSize(value)
+		props.setFontSize(value)
+	}
 
 	return (
 		<>
+			<Spacer size='2rem'></Spacer>
 			<ChoiceGroup 
 				defaultSelectedKey={props.theme}
-				selectedKey={selectedKey}
+				selectedKey={selectedTheme}
 				options={themeOptions}
 				onChange={onThemeChange}
 				label="テーマ"
 			/>
+			<Spacer size='2rem'></Spacer>
 			<Dropdown
 				selectedKey={selectedLanguage ? selectedLanguage.key : undefined}
 				label="言語"
 				options={languageList}
 				defaultSelectedKey={props.language}
-				styles={languageListStyle}
+				styles={listStyle}
 				onChange={onLanguageChange}
 			/>
+			<Spacer size='2rem'></Spacer>
+			<Dropdown
+				selectedKey={selectedFontFamily ? selectedFontFamily.key : undefined}
+				label="フォント"
+				options={fontFamilyList}
+				defaultSelectedKey={props.fontFamily}
+				styles={listStyle}
+				onChange={onFontFamilyChange}
+			/>
+			<Spacer size='2rem'></Spacer>
 			<Slider
 				label="フォントサイズ"
 				min={8}

@@ -23,24 +23,16 @@ const App = () => {
   // Settings
   const [theme, setTheme] = useState<string>('light')
   const [fontSize, setFontSize] = useState<number>(18)
-  const [fontFamily, setFontFamily] = useState<string>('メイリオ')
+  const [fontFamily, setFontFamily] = useState<string>('"Source Code Pro", "Sawarabi Gothic", monospace')
   const [language, setLanguage] = useState<string>('javascript')
 
   useEffect(() => {
     //
     console.log(`[dev] hello ${theme} ${fontSize} ${fontFamily}`)
-  }, []);
-
-    /*
-  const [themeName, setThemeName] = useState('light');
-
-  const tglThemeName = () => {
-    setThemeName(themeName === 'light' ? 'vs-dark' : 'light')
-    console.log(`[dev] setThemeName : ${themeName}`)
-  */
+  }, [])
 
   // サイドパネル
-  const [isOpen, { setTrue: openPanel, setFalse: dismissPanel }] = useBoolean(false);
+  const [isOpen, { setTrue: openPanel, setFalse: dismissPanel }] = useBoolean(false)
   const onRenderFooterContent = React.useCallback(
     () => (
       <div>
@@ -73,6 +65,7 @@ const App = () => {
           fontFamily={fontFamily}
           setTheme={setTheme}
           setLanguage={setLanguage}
+          setFontFamily={setFontFamily}
           setFontSize={setFontSize}
         />
       </Panel>
