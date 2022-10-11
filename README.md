@@ -4,8 +4,12 @@
 1. VSCodeを管理者で起動する
 1. `npm i` する
 1. `npm start` する
+
     > もし `Allow localhost loopback for Microsoft Edge WebView?` がでたら `y` する
+
 1. リボンのホームタブの `ShowTaskpane` のアイコンをクリック
+
+    > 都度コンパイルが走るので、画面表示されるまで多少の時間がかかります *
 
 # メモ
 
