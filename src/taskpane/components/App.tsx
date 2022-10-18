@@ -5,17 +5,33 @@ import { useEffect, useState }  from 'react'
 // DataStore
 import { setConfig, getConfig } from '../datastore/datastore'
 
+// FluentUI
+import { ThemeProvider, PartialTheme } from '@fluentui/react'
+import { useBoolean } from '@fluentui/react-hooks'
+
 // FluentUIComponents
 import { Panel } from '@fluentui/react/lib/Panel'
 import { DefaultButton, PrimaryButton } from '@fluentui/react/lib/Button'
-
-// FluentUIHooks
-import { useBoolean } from '@fluentui/react-hooks'
 
 // ComponentFiles
 import TextArea from './TextArea'
 import Footer from './Footer'
 import Settings from './Settings'
+
+
+const lightTheme: PartialTheme = {
+  semanticColors: {
+    bodyBackground: '#FAFAFA',
+    bodyText: '#111111',
+  },
+}
+
+const darkTheme: PartialTheme = {
+  semanticColors: {
+    bodyBackground: '#111111',
+    bodyText: '#FAFAFA',
+  },
+}
 
 /* global console, Excel, require  */
 const App = () => {
@@ -45,7 +61,7 @@ const App = () => {
   )
 
   return (
-    <>
+    <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
       <TextArea 
         theme={theme}
         language={language}
@@ -82,7 +98,7 @@ const App = () => {
         tabSize={tabSize}
         openPanel={openPanel}
       />
-    </>
+    </ThemeProvider>
   )
 }
 

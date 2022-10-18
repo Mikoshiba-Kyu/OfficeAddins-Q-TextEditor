@@ -88,6 +88,10 @@ const convertDisplayLanguage = (languageKey: string): string => {
 		}
 
 		// highlight only.
+		case 'm' : {
+			displayLanguage = 'M言語'
+			break
+		}
 		case 'xml' : {
 			displayLanguage = 'XML'
 			break

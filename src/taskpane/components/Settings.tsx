@@ -22,6 +22,7 @@ const languageList = [
 	{key: 'json', text: 'JSON'},
 	{key: 'html', text: 'HTML'},
 	// highlight only.
+	{key: 'm', text: 'M言語'},
 	{key: 'xml', text: 'XML'},
 	{key: 'php', text: 'PHP'},
 	{key: 'c#', text: 'C#'},

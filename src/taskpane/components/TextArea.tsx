@@ -1,8 +1,13 @@
-// monaco-editor/react
-// https://github.com/suren-atoyan/monaco-react
-//
-// monaco-editor options reference
-// https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.IStandaloneEditorConstructionOptions.html
+/*
+monaco-editor/react
+https://github.com/suren-atoyan/monaco-react
+
+monaco-editor options reference
+https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.IStandaloneEditorConstructionOptions.html
+
+monarch
+https://microsoft.github.io/monaco-editor/monarch.html
+*/
 
 import * as React from "react";
 import Editor from "@monaco-editor/react"
@@ -17,16 +22,16 @@ export interface Props {
 
 const TextArea = (props: Props) => {
 	function handleEditorWillMount(monaco) {
-    // monacoのインスタンスはこちらです。
+    	// monacoのインスタンスはこちらです。
 		// エディタがマウントされる前に何かする
-		monaco.languages.register({ id: 'mylang' })
-    monaco.languages.setMonarchTokensProvider('mylang', monacoHighLight())
-  }
+		monaco.languages.register({ id: 'm' })
+		monaco.languages.setMonarchTokensProvider('m', mLangSyntax())
+	}
 
 	function handleEditorValidation(markers) {
-    // model markers
-    markers.forEach((marker) => console.log("onValidate:", marker.message));
-  }
+		// model markers
+		markers.forEach((marker) => console.log("onValidate:", marker.message));
+	}
 
 	return (
 		<div className="monaco-editor">
@@ -46,165 +51,124 @@ const TextArea = (props: Props) => {
 
 export default TextArea
 
-const monacoHighLight = () => {
+const mLangSyntax = () => {
 	return {
-		// defaulttoken を invalid にすることで、まだトークン化していないものを確認することができます。
-		defaultToken: 'invalid',
+		// defaultToken: 'invalid' を有効化することで、まだトークン化していない部分を赤字にすることができます。
+		// defaultToken: 'invalid',
 	
-		keywords: [
-			'break', 'case', 'catch', 'class', 'continue', 'const',
-			'constructor', 'debugger', 'default', 'delete', 'do', 'else',
-			'export', 'extends', 'false', 'finally', 'for', 'from', 'function',
-			'get', 'if', 'import', 'in', 'instanceof', 'let', 'new', 'null',
-			'return', 'set', 'super', 'switch', 'symbol', 'this', 'throw', 'true',
-			'try', 'typeof', 'undefined', 'var', 'void', 'while', 'with', 'yield',
-			'async', 'await', 'of'
-		],
-	
-		typeKeywords: [
-			'any', 'boolean', 'number', 'object', 'string', 'undefined'
-		],
-	
-		operators: [
-			'<=', '>=', '==', '!=', '===', '!==', '=>', '+', '-', '**',
-			'*', '/', '%', '++', '--', '<<', '</', '>>', '>>>', '&',
-			'|', '^', '!', '~', '&&', '||', '?', ':', '=', '+=', '-=',
-			'*=', '**=', '/=', '%=', '<<=', '>>=', '>>>=', '&=', '|=',
-			'^=', '@',
-		],
-	
-		// we include these common regular expressions
-		symbols: /[=><!~?:&|+\-*\/\^%]+/,
-		escapes: /\\(?:[abfnrtv\\"']|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
-		digits: /\d+(_+\d+)*/,
-		octaldigits: /[0-7]+(_+[0-7]+)*/,
-		binarydigits: /[0-1]+(_+[0-1]+)*/,
-		hexdigits: /[[0-9a-fA-F]+(_+[0-9a-fA-F]+)*/,
-	
-		regexpctl: /[(){}\[\]\$\^|\-*+?\.]/,
-		regexpesc: /\\(?:[bBdDfnrstvwWn0\\\/]|@regexpctl|c[A-Z]|x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4})/,
-	
+		keywords: [ 'class', 'new', 'string', 'number', 'boolean', 'private', 'public' ],
+		
 		// The main tokenizer for our languages
 		tokenizer: {
 			root: [
-				[/[{}]/, 'delimiter.bracket'],
-				{ include: 'common' }
-			],
-	
-			common: [
-				// identifiers and keywords
-				[/[a-z_$][\w$]*/, {
+				[/@?[a-zA-Z][\w$]*/, {
 					cases: {
-						'@typeKeywords': 'keyword',
 						'@keywords': 'keyword',
-						'@default': 'identifier'
+						'@default': 'variable'
 					}
 				}],
-				[/[A-Z][\w\$]*/, 'type.identifier'],  // to show class names nicely
-				// [/[A-Z][\w\$]*/, 'identifier'],
+			],
+			comment: [
+				[/\/\//, 'comment']
+			],
+		
+			string: [
+				[/".*?"*/, 'string']
+			],
+		}
+	}
+}
+
+const bk_mLangSyntax = () => {
+	return {
+		// defaultToken: 'invalid' を有効化することで、まだトークン化していない部分を赤字にすることができます。
+		// defaultToken: 'invalid',
 	
+		keywords: [
+			'and', 'or', 'not', 'if', 'then', 'else', 'try', 'catch',
+			'otherwise', 'as', 'each', 'in', 'is', 'let', 'meta', 'type',
+			'error', 'section', 'shared'
+		],
+		
+		typeKeywords: [
+			'optional', 'nullable', 'action', 'any', 'anynonnull', 'binary',
+			'date', 'datetime', 'datetimezone', 'duration', 'function', 'list',
+			'logical', 'none', 'null', 'number', 'record', 'table', 'text', 'time', 'type'
+		],
+		
+		operators: [
+			'=', '>', '<', '!', '~', '?', ':', '==', '<=', '>=', '!=',
+			'&&', '||', '++', '--', '+', '-', '*', '/', '&', '|', '^', '%',
+			'<<', '>>', '>>>', '+=', '-=', '*=', '/=', '&=', '|=', '^=',
+			'%=', '<<=', '>>=', '>>>=', '??'
+		],
+		
+		// we include these common regular expressions
+		symbols:  /[=><!~?:&|+\-*\/\^%]+/,
+		
+		// C# style strings
+		escapes: /\\(?:[abfnrtv\\"']|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
+		
+		// The main tokenizer for our languages
+		tokenizer: {
+			root: [
+				// identifiers and keywords
+				[/[a-z_$][\w$]*/, { cases: { '@typeKeywords': 'keyword',
+											'@keywords': 'keyword',
+											'@default': 'identifier' } }],
+				[/[A-Z][\w\$]*/, 'type.identifier' ],  // to show class names nicely
+			
 				// whitespace
 				{ include: '@whitespace' },
-	
-				// regular expression: ensure it is terminated before beginning (otherwise it is an opeator)
-				[/\/(?=([^\\\/]|\\.)+\/([gimsuy]*)(\s*)(\.|;|\/|,|\)|\]|\}|$))/, { token: 'regexp', bracket: '@open', next: '@regexp' }],
-	
+			
 				// delimiters and operators
-				[/[()\[\]]/, '@brackets'],
+				[/[{}()\[\]]/, '@brackets'],
 				[/[<>](?!@symbols)/, '@brackets'],
-				[/@symbols/, {
-					cases: {
-						'@operators': 'delimiter',
-						'@default': ''
-					}
-				}],
-	
+				[/@symbols/, { cases: { '@operators': 'operator',
+										'@default'  : '' } } ],
+		
+				// @ annotations.
+				// As an example, we emit a debugging log message on these tokens.
+				// Note: message are supressed during the first load -- change some lines to see them.
+				[/@\s*[a-zA-Z_\$][\w\$]*/, { token: 'annotation', log: 'annotation token: $0' }],
+		
 				// numbers
-				[/(@digits)[eE]([\-+]?(@digits))?/, 'number.float'],
-				[/(@digits)\.(@digits)([eE][\-+]?(@digits))?/, 'number.float'],
-				[/0[xX](@hexdigits)/, 'number.hex'],
-				[/0[oO]?(@octaldigits)/, 'number.octal'],
-				[/0[bB](@binarydigits)/, 'number.binary'],
-				[/(@digits)/, 'number'],
-	
+				[/\d*\.\d+([eE][\-+]?\d+)?/, 'number.float'],
+				[/0[xX][0-9a-fA-F]+/, 'number.hex'],
+				[/\d+/, 'number'],
+		
 				// delimiter: after number because of .\d floats
 				[/[;,.]/, 'delimiter'],
-	
+			
 				// strings
-				[/"([^"\\]|\\.)*$/, 'string.invalid'],  // non-teminated string
-				[/'([^'\\]|\\.)*$/, 'string.invalid'],  // non-teminated string
-				[/"/, 'string', '@string_double'],
-				[/'/, 'string', '@string_single'],
-				[/`/, 'string', '@string_backtick'],
+				[/"([^"\\]|\\.)*$/, 'string.invalid' ],  // non-teminated string
+				[/"/,  { token: 'string.quote', bracket: '@open', next: '@string' } ],
+			
+				// characters
+				[/'[^\\']'/, 'string'],
+				[/(')(@escapes)(')/, ['string','string.escape','string']],
+				[/'/, 'string.invalid']
 			],
-	
-			whitespace: [
-				[/[ \t\r\n]+/, ''],
-				[/\/\*\*(?!\/)/, 'comment.doc', '@jsdoc'],
-				[/\/\*/, 'comment', '@comment'],
-				[/\/\/.*$/, 'comment'],
-			],
-	
+		
 			comment: [
-				[/[^\/*]+/, 'comment'],
-				[/\*\//, 'comment', '@pop'],
-				[/[\/*]/, 'comment']
+				[/[^\/*]+/, 'comment' ],
+				[/\/\*/,    'comment', '@push' ],    // nested comment
+				["\\*/",    'comment', '@pop'  ],
+				[/[\/*]/,   'comment' ]
 			],
-	
-			jsdoc: [
-				[/[^\/*]+/, 'comment.doc'],
-				[/\*\//, 'comment.doc', '@pop'],
-				[/[\/*]/, 'comment.doc']
-			],
-	
-			// We match regular expression quite precisely
-			regexp: [
-				[/(\{)(\d+(?:,\d*)?)(\})/, ['regexp.escape.control', 'regexp.escape.control', 'regexp.escape.control']],
-				[/(\[)(\^?)(?=(?:[^\]\\\/]|\\.)+)/, ['regexp.escape.control', { token: 'regexp.escape.control', next: '@regexrange' }]],
-				[/(\()(\?:|\?=|\?!)/, ['regexp.escape.control', 'regexp.escape.control']],
-				[/[()]/, 'regexp.escape.control'],
-				[/@regexpctl/, 'regexp.escape.control'],
-				[/[^\\\/]/, 'regexp'],
-				[/@regexpesc/, 'regexp.escape'],
-				[/\\\./, 'regexp.invalid'],
-				[/(\/)([gimsuy]*)/, [{ token: 'regexp', bracket: '@close', next: '@pop' }, 'keyword.other']],
-			],
-	
-			regexrange: [
-				[/-/, 'regexp.escape.control'],
-				[/\^/, 'regexp.invalid'],
-				[/@regexpesc/, 'regexp.escape'],
-				[/[^\]]/, 'regexp'],
-				[/\]/, { token: 'regexp.escape.control', next: '@pop', bracket: '@close' }],
-			],
-	
-			string_double: [
-				[/[^\\"]+/, 'string'],
+		
+			string: [
+				[/[^\\"]+/,  'string'],
 				[/@escapes/, 'string.escape'],
-				[/\\./, 'string.escape.invalid'],
-				[/"/, 'string', '@pop']
+				[/\\./,      'string.escape.invalid'],
+				[/"/,        { token: 'string.quote', bracket: '@close', next: '@pop' } ]
 			],
-	
-			string_single: [
-				[/[^\\']+/, 'string'],
-				[/@escapes/, 'string.escape'],
-				[/\\./, 'string.escape.invalid'],
-				[/'/, 'string', '@pop']
-			],
-	
-			string_backtick: [
-				[/\$\{/, { token: 'delimiter.bracket', next: '@bracketCounting' }],
-				[/[^\\`$]+/, 'string'],
-				[/@escapes/, 'string.escape'],
-				[/\\./, 'string.escape.invalid'],
-				[/`/, 'string', '@pop']
-			],
-	
-			bracketCounting: [
-				[/\{/, 'delimiter.bracket', '@bracketCounting'],
-				[/\}/, 'delimiter.bracket', '@pop'],
-				{ include: 'common' }
-			],
-		},
+		
+			whitespace: [
+				[/[ \t\r\n]+/, 'white'],
+				[/\/\*/,       'comment', '@comment' ],
+				[/\/\/.*$/,    'comment'],
+			]
+		}
 	}
 }
