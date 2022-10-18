@@ -13,6 +13,9 @@ const themeOptions: IChoiceGroupOption[] = [
 
 // ----------------- 言語 -----------------
 const languageList = [
+	// Plain Text.
+	{key: 'plainText', text: 'PlainText'},
+
 	// highlight and intellisense.
 	{key: 'typescript', text: 'TypeScript'},
 	{key: 'javascript', text: 'JavaScript'},

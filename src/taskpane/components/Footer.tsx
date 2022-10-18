@@ -57,6 +57,12 @@ export default Footer
 const convertDisplayLanguage = (languageKey: string): string => {
 	let displayLanguage: string
 	switch (languageKey) {
+		// Plain Text.
+		case 'plainText' : {
+			displayLanguage = 'PlainText'
+			break
+		}
+
 		// highlight and intelligence.
 		case 'typescript' : {
 			displayLanguage = 'TypeScript'

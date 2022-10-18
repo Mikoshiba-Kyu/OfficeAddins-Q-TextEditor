@@ -38,7 +38,7 @@ const App = () => {
 
   // Settings
   const [theme, setTheme] = useState<string>('light')
-  const [language, setLanguage] = useState<string>('javascript')
+  const [language, setLanguage] = useState<string>('plainText')
   const [fontFamily, setFontFamily] = useState<string>('"Source Code Pro", "Sawarabi Gothic", monospace')
   const [fontSize, setFontSize] = useState<number>(18)
   const [tabSize, setTabSize] = useState<number>(4)
