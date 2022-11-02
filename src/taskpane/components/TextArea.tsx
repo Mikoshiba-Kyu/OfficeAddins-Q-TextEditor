@@ -9,18 +9,26 @@ monarch
 https://microsoft.github.io/monaco-editor/monarch.html
 */
 
+// ---------------------- Dev Settings ----------------------
+const isLogging = true
+const moduleName = 'TextArea.tsx'
+
+// ---------------------- Import ----------------------
 import * as React from "react";
 import Editor from "@monaco-editor/react"
+import { useMonacoSettings } from '../hooks/useMonacoSettings'
 
+// ---------------------- Props ----------------------
 export interface Props {
 	theme: string
-	language: string
-	fontFamily: string
-	fontSize: number
-	tabSize: number
 }
 
+// ---------------------- Contents ----------------------
 const TextArea = (props: Props) => {
+	isLogging && console.log(`[Addins] [${moduleName}] レンダリング`)
+
+	const { language, fontFamily, fontSize, tabSize } = useMonacoSettings()
+
 	function handleEditorWillMount(monaco) {
     	// monaco's instance
 		monaco.languages.register({ id: 'm' })
@@ -37,20 +45,20 @@ const TextArea = (props: Props) => {
 		<div className="monaco-editor">
 			<Editor 
 				theme = {props.theme}
-				language = {props.language}
+				language = {language}
 				defaultValue = 'sample text'
 				width = '100%'
 				height = 'calc(100vh - 1.2rem)'
 				beforeMount={handleEditorWillMount}
 				onValidate={handleEditorValidation}
-				options = {{ fontFamily: props.fontFamily, fontSize: props.fontSize, tabSize: props.tabSize}}
+				options = {{ fontFamily: fontFamily, fontSize: fontSize, tabSize: tabSize}}
 		/>
 		</div>
 	)
 }
-
 export default TextArea
 
+// ---------------------- Logic ----------------------
 const mLangSyntax = () => {
 	return {
 		// defaultToken: 'invalid' を有効化することで、まだトークン化していない部分を赤字にすることができます。

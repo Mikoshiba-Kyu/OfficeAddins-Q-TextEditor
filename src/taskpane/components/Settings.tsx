@@ -1,9 +1,128 @@
+// ---------------------- Dev Settings ----------------------
+const isLogging = true
+const moduleName = 'Settings.tsx'
+
+// ---------------------- Import ----------------------
 import * as React from 'react'
 import { Dropdown, IDropdownOption, IDropdownStyles } from '@fluentui/react/lib/Dropdown'
 import { ChoiceGroup, IChoiceGroupOption } from '@fluentui/react/lib/ChoiceGroup'
 import { Slider } from '@fluentui/react'
 import { Spacer } from './Spacer'
+import { useMonacoSettings } from '../hooks/useMonacoSettings'
 
+// ---------------------- Props ----------------------
+export interface Props {
+	theme: string
+	setTheme
+}
+
+// ---------------------- Contents ----------------------
+const Settings = (props: Props) => {
+	isLogging && console.log(`[Addins] [${moduleName}] レンダリング`)
+	
+	const {
+		language,
+		setLanguage,
+		fontFamily,
+		setFontFamily,
+		fontSize,
+		setFontSize,
+		tabSize,
+		setTabSize
+	} = useMonacoSettings()
+
+	// テーマ
+	const [selectedTheme, setSelectedTheme] = React.useState<string | undefined>(props.theme)
+	const onThemeChange = React.useCallback((_event: React.SyntheticEvent<HTMLElement>, option: IChoiceGroupOption) => {
+		setSelectedTheme(option.key)
+		props.setTheme(option.key)
+	}, [])
+
+	// 言語
+	const [selectedLanguage, setSelectedLanguage] = React.useState<IDropdownOption>()
+	const onLanguageChange = (_event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void => {
+		setSelectedLanguage(item)
+		setLanguage(item.key.toString())
+	}
+
+	// フォントファミリー
+	const [selectedFontFamily, setSelectedFontFamily] = React.useState<IDropdownOption>()
+	const onFontFamilyChange = (_event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void => {
+		setSelectedFontFamily(item)
+		setFontFamily(item.key.toString())
+	}
+
+	// フォントサイズ
+	const [inputFontSize, setInputFontSize] = React.useState(fontSize);
+	const onFontSizeChange = (value: number) => {
+		setInputFontSize(value)
+		setFontSize(value)
+	}
+
+	// タブサイズ
+	const [inputTabSize, setInputTabSize] = React.useState(tabSize);
+	const onTabSizeChange = (value: number) => {
+		setInputTabSize(value)
+		setTabSize(value)
+	}
+
+	return (
+		<>
+			<Spacer size='2rem'></Spacer>
+			<ChoiceGroup 
+				defaultSelectedKey={props.theme}
+				selectedKey={selectedTheme}
+				options={themeOptions}
+				onChange={onThemeChange}
+				label="テーマ"
+			/>
+			<Spacer size='2rem'></Spacer>
+			<Dropdown
+				selectedKey={selectedLanguage ? selectedLanguage.key : undefined}
+				label="言語"
+				options={languageList}
+				defaultSelectedKey={language}
+				styles={listStyle}
+				onChange={onLanguageChange}
+			/>
+			<Spacer size='2rem'></Spacer>
+			<Dropdown
+				selectedKey={selectedFontFamily ? selectedFontFamily.key : undefined}
+				label="フォント"
+				options={fontFamilyList}
+				defaultSelectedKey={fontFamily}
+				styles={listStyle}
+				onChange={onFontFamilyChange}
+			/>
+			<Spacer size='2rem'></Spacer>
+			<Slider
+				label="フォントサイズ"
+				min={8}
+				max={36}
+				step={2}
+				defaultValue={fontSize}
+				value={inputFontSize}
+				onChange={onFontSizeChange}
+				showValue
+				snapToStep
+			/>
+			<Spacer size='2rem'></Spacer>
+			<Slider
+				label="Tabサイズ"
+				min={2}
+				max={4}
+				step={2}
+				defaultValue={tabSize}
+				value={inputTabSize}
+				onChange={onTabSizeChange}
+				showValue
+				snapToStep
+			/>
+		</>
+	)
+}
+
+export default Settings
 
 // ----------------- テーマ -----------------
 const themeOptions: IChoiceGroupOption[] = [
@@ -61,111 +180,3 @@ const listStyle: Partial<IDropdownStyles> = {
 		fontSize: 16
 	}
 }
-
-export interface Props {
-	theme: string
-	setTheme
-	language: string
-	setLanguage
-	fontFamily: string
-	setFontFamily
-	fontSize: number
-	setFontSize
-	tabSize: number
-	setTabSize
-}
-
-const Settings = (props: Props) => {
-
-	// テーマ
-	const [selectedTheme, setSelectedTheme] = React.useState<string | undefined>(props.theme)
-	const onThemeChange = React.useCallback((_event: React.SyntheticEvent<HTMLElement>, option: IChoiceGroupOption) => {
-		setSelectedTheme(option.key)
-		props.setTheme(option.key)
-	}, [])
-
-	// 言語
-	const [selectedLanguage, setSelectedLanguage] = React.useState<IDropdownOption>()
-	const onLanguageChange = (_event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void => {
-		setSelectedLanguage(item)
-		props.setLanguage(item.key)
-	}
-
-	// フォントファミリー
-	const [selectedFontFamily, setSelectedFontFamily] = React.useState<IDropdownOption>()
-	const onFontFamilyChange = (_event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void => {
-		setSelectedFontFamily(item)
-		props.setFontFamily(item.key)
-	}
-
-	// フォントサイズ
-	const [fontSize, setFontSize] = React.useState(props.fontSize);
-	const onFontSizeChange = (value: number) => {
-		setFontSize(value)
-		props.setFontSize(value)
-	}
-
-	// タブサイズ
-	const [tabSize, setTabSize] = React.useState(props.fontSize);
-	const onTabSizeChange = (value: number) => {
-		setTabSize(value)
-		props.setTabSize(value)
-	}
-
-	return (
-		<>
-			<Spacer size='2rem'></Spacer>
-			<ChoiceGroup 
-				defaultSelectedKey={props.theme}
-				selectedKey={selectedTheme}
-				options={themeOptions}
-				onChange={onThemeChange}
-				label="テーマ"
-			/>
-			<Spacer size='2rem'></Spacer>
-			<Dropdown
-				selectedKey={selectedLanguage ? selectedLanguage.key : undefined}
-				label="言語"
-				options={languageList}
-				defaultSelectedKey={props.language}
-				styles={listStyle}
-				onChange={onLanguageChange}
-			/>
-			<Spacer size='2rem'></Spacer>
-			<Dropdown
-				selectedKey={selectedFontFamily ? selectedFontFamily.key : undefined}
-				label="フォント"
-				options={fontFamilyList}
-				defaultSelectedKey={props.fontFamily}
-				styles={listStyle}
-				onChange={onFontFamilyChange}
-			/>
-			<Spacer size='2rem'></Spacer>
-			<Slider
-				label="フォントサイズ"
-				min={8}
-				max={36}
-				step={2}
-				defaultValue={props.fontSize}
-				value={fontSize}
-				onChange={onFontSizeChange}
-				showValue
-				snapToStep
-			/>
-			<Spacer size='2rem'></Spacer>
-			<Slider
-				label="Tabサイズ"
-				min={2}
-				max={4}
-				step={2}
-				defaultValue={props.tabSize}
-				value={tabSize}
-				onChange={onTabSizeChange}
-				showValue
-				snapToStep
-			/>
-		</>
-	)
-}
-
-export default Settings

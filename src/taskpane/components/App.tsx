@@ -11,7 +11,7 @@ import { useBoolean } from '@fluentui/react-hooks'
 
 // FluentUIComponents
 import { Panel } from '@fluentui/react/lib/Panel'
-import { DefaultButton, PrimaryButton } from '@fluentui/react/lib/Button'
+import { DefaultButton } from '@fluentui/react/lib/Button'
 
 // ComponentFiles
 import TextArea from './TextArea'
@@ -33,20 +33,15 @@ const darkTheme: PartialTheme = {
   },
 }
 
-/* global console, Excel, require  */
+// ---------------------- Contents ----------------------
 const App = () => {
 
   // Settings
   const [theme, setTheme] = useState<string>('light')
-  const [language, setLanguage] = useState<string>('plainText')
-  const [fontFamily, setFontFamily] = useState<string>('"Source Code Pro", "Sawarabi Gothic", monospace')
-  const [fontSize, setFontSize] = useState<number>(18)
-  const [tabSize, setTabSize] = useState<number>(4)
-
 
   useEffect(() => {
     //
-    console.log(`[dev] hello ${theme} ${fontSize} ${fontFamily}`)
+    // console.log(`[dev] hello ${theme} ${fontSize} ${fontFamily}`)
   }, [])
 
   // サイドパネル
@@ -64,10 +59,6 @@ const App = () => {
     <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
       <TextArea 
         theme={theme}
-        language={language}
-        fontSize={fontSize}
-        fontFamily={fontFamily}
-        tabSize={tabSize}
       />
       <Panel
         isOpen={isOpen}
@@ -80,22 +71,10 @@ const App = () => {
         <Settings 
           theme={theme}
           setTheme={setTheme}
-          language={language}
-          setLanguage={setLanguage}
-          fontFamily={fontFamily}
-          setFontFamily={setFontFamily}
-          fontSize={fontSize}
-          setFontSize={setFontSize}
-          tabSize={tabSize}
-          setTabSize={setTabSize}
         />
       </Panel>
       <Footer 
         theme={theme}
-        language={language}
-        fontFamily={fontFamily}
-        fontSize={fontSize}
-        tabSize={tabSize}
         openPanel={openPanel}
       />
     </ThemeProvider>

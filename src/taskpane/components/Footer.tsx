@@ -1,17 +1,25 @@
+// ---------------------- Dev Settings ----------------------
+const isLogging = true
+const moduleName = 'Footer.tsx'
+
+// ---------------------- Import ----------------------
 import * as React from "react"
 import { DefaultPalette, Stack, IStackStyles, IStackItemStyles } from '@fluentui/react'
 import { BaseButton, ActionButton } from '@fluentui/react/lib/Button'
+import { useMonacoSettings } from '../hooks/useMonacoSettings'
 
+// ---------------------- Props ----------------------
 export interface Props {
 	theme: string
-	language: string
-	fontFamily: string
-	fontSize: number
-	tabSize: number
 	openPanel: React.MouseEventHandler<HTMLAnchorElement | HTMLButtonElement | HTMLDivElement | HTMLSpanElement | BaseButton>
 }
 
+// ---------------------- Contents ----------------------
 const Footer = (props: Props) => {
+	isLogging && console.log(`[Addins] [${moduleName}] レンダリング`)
+
+	const {language, fontFamily, fontSize, tabSize} = useMonacoSettings()
+
 	// Styles definition
 	const stackStyles: IStackStyles = {
 		root: {
@@ -34,16 +42,16 @@ const Footer = (props: Props) => {
 	return (
 		<Stack horizontal horizontalAlign="end" styles={stackStyles}>
 			<Stack.Item styles={stackItemStyles}>
-				<ActionButton styles={stackItemStyles}>{`${convertDisplayLanguage(props.language)}`}</ActionButton>
+				<ActionButton styles={stackItemStyles}>{`${convertDisplayLanguage(language)}`}</ActionButton>
 			</Stack.Item>
 			<Stack.Item styles={stackItemStyles}>
-				<ActionButton styles={stackItemStyles}>{`フォントサイズ  :  ${props.fontSize}`}</ActionButton>
+				<ActionButton styles={stackItemStyles}>{`フォント : ${convertDisplayFontName(fontFamily)}`}</ActionButton>
 			</Stack.Item>
 			<Stack.Item styles={stackItemStyles}>
-				<ActionButton styles={stackItemStyles}>{`Tabサイズ  :  ${props.tabSize}`}</ActionButton>
+				<ActionButton styles={stackItemStyles}>{`フォントサイズ  :  ${fontSize}`}</ActionButton>
 			</Stack.Item>
 			<Stack.Item styles={stackItemStyles}>
-				<ActionButton styles={stackItemStyles}>{`UTF-8`}</ActionButton>
+				<ActionButton styles={stackItemStyles}>{`Tabサイズ  :  ${tabSize}`}</ActionButton>
 			</Stack.Item>
 			<Stack.Item styles={stackItemStyles}>
 				<ActionButton styles={stackItemStyles} onClick={props.openPanel}>{`Settings`}</ActionButton>
@@ -180,4 +188,27 @@ const convertDisplayLanguage = (languageKey: string): string => {
 		}
 	}
 	return displayLanguage
+}
+
+const convertDisplayFontName = (fontNameKey: string) => {
+	let displayFontName: string
+	switch (fontNameKey) {
+		case '"Robot Mono", "Sawarabi Gothic", monospace' : {
+			displayFontName = 'Robot Mono'
+			break
+		}
+		case '"Source Code Pro", "Sawarabi Gothic", monospace' : {
+			displayFontName = 'Source Code Pro'
+			break
+		}
+		case '"Anonymous Pro", "Sawarabi Gothic", monospace' : {
+			displayFontName = 'Anonymous Pro'
+			break
+		}
+		case '"Ubuntu Mono", "Sawarabi Gothic", monospace' : {
+			displayFontName = 'Ubuntu Mono'
+			break
+		}
+	}
+	return displayFontName
 }
