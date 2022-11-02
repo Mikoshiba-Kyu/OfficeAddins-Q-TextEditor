@@ -11,7 +11,7 @@ initializeIcons()
 
 let isOfficeInitialized = false
 
-const title = "右のTextEditor"
+const title = "Q-TextEditor"
 
 const render = (Component) => {
   ReactDOM.render(
