@@ -6,15 +6,15 @@ Q-TextEditorはExcelのサイドパネルで使用可能なシンプルなテキ
 
 ### Lightテーマ設定
 
-![](assets/ss_lightmode-normal.png)
+<img src="https://github.com/Mikoshiba-Kyu/OfficeAddins-Q-TextEditor/blob/main/assets/ss_lightmode-normal.png" width="600px">
 
 ### Darkテーマ設定
 
-![](assets/ss_darkmode-normal.png)
+<img src="https://github.com/Mikoshiba-Kyu/OfficeAddins-Q-TextEditor/blob/main/assets/ss_darkmode-normal.png" width="600px">
 
 ### 設定パネル
 
-![](assets/ss_setting_and_highlight.png)
+<img src="https://github.com/Mikoshiba-Kyu/OfficeAddins-Q-TextEditor/blob/main/assets/ss_setting_and_highlight.png" width="600px">
 
 ## 設定可能なコンフィグ
 
