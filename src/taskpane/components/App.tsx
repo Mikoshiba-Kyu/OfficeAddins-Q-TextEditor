@@ -24,15 +24,10 @@ import TextArea from './TextArea'
 import Footer from './Footer'
 import Settings from './Settings'
 
-import { useMonacoSettings } from '../hooks/useMonacoSettings'
+import { createXmlData, saveSettings } from '../excelapi'
 
-// ---------------------- Types ----------------------
-type MonacoSettings = {
-	language?: string,
-	fontFamily?: string,
-	fontSize?: number,
-	tabSize?: number
-}
+
+import { useMonacoSettings } from '../hooks/useMonacoSettings'
 
 // ---------------------- Contents ----------------------
 const App = () => {
@@ -59,8 +54,21 @@ const App = () => {
     [dismissPanel],
   )
 
+  const createSettingsTest = () => {
+    const sampleData = {
+      Data1: 'purin',
+      Data2: 'cake',
+      Data3: 'ice',
+      Data4: 'pan',
+      Data5: 'coffie'
+    }
+
+    createXmlData('MasterData', sampleData)
+  }
+
   return (
     <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
+      <DefaultButton onClick={createSettingsTest} >sample</DefaultButton>
       <TextArea 
         theme={theme}
         monacoSettings={monacoSettings}
