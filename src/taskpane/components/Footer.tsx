@@ -6,19 +6,25 @@ const moduleName = 'Footer.tsx'
 import * as React from "react"
 import { DefaultPalette, Stack, IStackStyles, IStackItemStyles } from '@fluentui/react'
 import { BaseButton, ActionButton } from '@fluentui/react/lib/Button'
-import { useMonacoSettings } from '../hooks/useMonacoSettings'
+
+// ---------------------- Types ----------------------
+type MonacoSettings = {
+	language?: string,
+	fontFamily?: string,
+	fontSize?: number,
+	tabSize?: number
+}
 
 // ---------------------- Props ----------------------
 export interface Props {
 	theme: string
+	monacoSettings: MonacoSettings
 	openPanel: React.MouseEventHandler<HTMLAnchorElement | HTMLButtonElement | HTMLDivElement | HTMLSpanElement | BaseButton>
 }
 
 // ---------------------- Contents ----------------------
 const Footer = (props: Props) => {
 	isLogging && console.log(`[Addins] [${moduleName}] レンダリング`)
-
-	const {language, fontFamily, fontSize, tabSize} = useMonacoSettings()
 
 	// Styles definition
 	const stackStyles: IStackStyles = {
@@ -42,16 +48,16 @@ const Footer = (props: Props) => {
 	return (
 		<Stack horizontal horizontalAlign="end" styles={stackStyles}>
 			<Stack.Item styles={stackItemStyles}>
-				<ActionButton styles={stackItemStyles}>{`${convertDisplayLanguage(language)}`}</ActionButton>
+				<ActionButton styles={stackItemStyles}>{`${convertDisplayLanguage(props.monacoSettings.language)}`}</ActionButton>
 			</Stack.Item>
 			<Stack.Item styles={stackItemStyles}>
-				<ActionButton styles={stackItemStyles}>{`フォント : ${convertDisplayFontName(fontFamily)}`}</ActionButton>
+				<ActionButton styles={stackItemStyles}>{`フォント : ${convertDisplayFontName(props.monacoSettings.fontFamily)}`}</ActionButton>
 			</Stack.Item>
 			<Stack.Item styles={stackItemStyles}>
-				<ActionButton styles={stackItemStyles}>{`フォントサイズ  :  ${fontSize}`}</ActionButton>
+				<ActionButton styles={stackItemStyles}>{`フォントサイズ  :  ${props.monacoSettings.fontSize}`}</ActionButton>
 			</Stack.Item>
 			<Stack.Item styles={stackItemStyles}>
-				<ActionButton styles={stackItemStyles}>{`Tabサイズ  :  ${tabSize}`}</ActionButton>
+				<ActionButton styles={stackItemStyles}>{`Tabサイズ  :  ${props.monacoSettings.tabSize}`}</ActionButton>
 			</Stack.Item>
 			<Stack.Item styles={stackItemStyles}>
 				<ActionButton styles={stackItemStyles} onClick={props.openPanel}>{`Settings`}</ActionButton>

@@ -5,12 +5,27 @@ const moduleName = 'useMonacoSettings.ts'
 // ---------------------- Import ----------------------
 import { useState } from "react"
 
+// ---------------------- Types ----------------------
+type MonacoSettings = {
+  language?: string,
+  fontFamily?: string,
+  fontSize?: number,
+  tabSize?: number
+}
+
 // ---------------------- Logic ----------------------
 export const useMonacoSettings = () => {
-  const [language, setLanguage] = useState<string>('plainText')
-  const [fontFamily, setFontFamily] = useState<string>('"Source Code Pro", "Sawarabi Gothic", monospace')
-  const [fontSize, setFontSize] = useState<number>(18)
-  const [tabSize, setTabSize] = useState<number>(4)
 
-  return {language, setLanguage, fontFamily, setFontFamily, fontSize, setFontSize, tabSize, setTabSize}
+  const [monacoSettings, setMonacoSettings] = useState<MonacoSettings>({
+    language: 'plainText',
+    fontFamily: '"Source Code Pro", "Sawarabi Gothic", monospace',
+    fontSize: 18,
+    tabSize: 4
+  })
+
+  const changeMonacoSettings = (params: MonacoSettings) => {
+    setMonacoSettings({...monacoSettings, ...params})
+  }
+
+  return {monacoSettings, changeMonacoSettings}
 }

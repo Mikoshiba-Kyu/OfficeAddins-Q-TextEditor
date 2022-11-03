@@ -8,28 +8,26 @@ import { Dropdown, IDropdownOption, IDropdownStyles } from '@fluentui/react/lib/
 import { ChoiceGroup, IChoiceGroupOption } from '@fluentui/react/lib/ChoiceGroup'
 import { Slider } from '@fluentui/react'
 import { Spacer } from './Spacer'
-import { useMonacoSettings } from '../hooks/useMonacoSettings'
+
+// ---------------------- Types ----------------------
+type MonacoSettings = {
+	language?: string,
+	fontFamily?: string,
+	fontSize?: number,
+	tabSize?: number
+}
 
 // ---------------------- Props ----------------------
 export interface Props {
 	theme: string
 	setTheme
+	monacoSettings: MonacoSettings
+	changeMonacoSettings: Function
 }
 
 // ---------------------- Contents ----------------------
 const Settings = (props: Props) => {
 	isLogging && console.log(`[Addins] [${moduleName}] レンダリング`)
-	
-	const {
-		language,
-		setLanguage,
-		fontFamily,
-		setFontFamily,
-		fontSize,
-		setFontSize,
-		tabSize,
-		setTabSize
-	} = useMonacoSettings()
 
 	// テーマ
 	const [selectedTheme, setSelectedTheme] = React.useState<string | undefined>(props.theme)
@@ -42,28 +40,28 @@ const Settings = (props: Props) => {
 	const [selectedLanguage, setSelectedLanguage] = React.useState<IDropdownOption>()
 	const onLanguageChange = (_event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void => {
 		setSelectedLanguage(item)
-		setLanguage(item.key.toString())
+		props.changeMonacoSettings({ language: item.key.toString() })
 	}
 
 	// フォントファミリー
 	const [selectedFontFamily, setSelectedFontFamily] = React.useState<IDropdownOption>()
 	const onFontFamilyChange = (_event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void => {
 		setSelectedFontFamily(item)
-		setFontFamily(item.key.toString())
+		props.changeMonacoSettings({ fontFamily: item.key.toString() })
 	}
 
 	// フォントサイズ
-	const [inputFontSize, setInputFontSize] = React.useState(fontSize);
+	const [inputFontSize, setInputFontSize] = React.useState(props.monacoSettings.fontSize);
 	const onFontSizeChange = (value: number) => {
 		setInputFontSize(value)
-		setFontSize(value)
+		props.changeMonacoSettings({ fontSize: value })
 	}
 
 	// タブサイズ
-	const [inputTabSize, setInputTabSize] = React.useState(tabSize);
+	const [inputTabSize, setInputTabSize] = React.useState(props.monacoSettings.tabSize);
 	const onTabSizeChange = (value: number) => {
 		setInputTabSize(value)
-		setTabSize(value)
+		props.changeMonacoSettings({ tabSize: value })
 	}
 
 	return (
@@ -81,7 +79,7 @@ const Settings = (props: Props) => {
 				selectedKey={selectedLanguage ? selectedLanguage.key : undefined}
 				label="言語"
 				options={languageList}
-				defaultSelectedKey={language}
+				defaultSelectedKey={props.monacoSettings.language}
 				styles={listStyle}
 				onChange={onLanguageChange}
 			/>
@@ -90,7 +88,7 @@ const Settings = (props: Props) => {
 				selectedKey={selectedFontFamily ? selectedFontFamily.key : undefined}
 				label="フォント"
 				options={fontFamilyList}
-				defaultSelectedKey={fontFamily}
+				defaultSelectedKey={props.monacoSettings.fontFamily}
 				styles={listStyle}
 				onChange={onFontFamilyChange}
 			/>
@@ -100,7 +98,7 @@ const Settings = (props: Props) => {
 				min={8}
 				max={36}
 				step={2}
-				defaultValue={fontSize}
+				defaultValue={props.monacoSettings.fontSize}
 				value={inputFontSize}
 				onChange={onFontSizeChange}
 				showValue
@@ -112,7 +110,7 @@ const Settings = (props: Props) => {
 				min={2}
 				max={4}
 				step={2}
-				defaultValue={tabSize}
+				defaultValue={props.monacoSettings.tabSize}
 				value={inputTabSize}
 				onChange={onTabSizeChange}
 				showValue

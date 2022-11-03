@@ -16,18 +16,24 @@ const moduleName = 'TextArea.tsx'
 // ---------------------- Import ----------------------
 import * as React from "react";
 import Editor from "@monaco-editor/react"
-import { useMonacoSettings } from '../hooks/useMonacoSettings'
+
+// ---------------------- Types ----------------------
+type MonacoSettings = {
+	language?: string,
+	fontFamily?: string,
+	fontSize?: number,
+	tabSize?: number
+}
 
 // ---------------------- Props ----------------------
 export interface Props {
 	theme: string
+	monacoSettings: MonacoSettings
 }
 
 // ---------------------- Contents ----------------------
 const TextArea = (props: Props) => {
 	isLogging && console.log(`[Addins] [${moduleName}] レンダリング`)
-
-	const { language, fontFamily, fontSize, tabSize } = useMonacoSettings()
 
 	function handleEditorWillMount(monaco) {
     	// monaco's instance
@@ -45,13 +51,19 @@ const TextArea = (props: Props) => {
 		<div className="monaco-editor">
 			<Editor 
 				theme = {props.theme}
-				language = {language}
+				language = {props.monacoSettings.language}
 				defaultValue = 'sample text'
 				width = '100%'
 				height = 'calc(100vh - 1.2rem)'
 				beforeMount={handleEditorWillMount}
 				onValidate={handleEditorValidation}
-				options = {{ fontFamily: fontFamily, fontSize: fontSize, tabSize: tabSize}}
+				options = {
+					{
+						fontFamily: props.monacoSettings.fontFamily,
+					 	fontSize: props.monacoSettings.fontSize,
+						tabSize: props.monacoSettings.tabSize
+					}
+				}
 		/>
 		</div>
 	)
