@@ -8,9 +8,6 @@ const moduleName = 'App.tsx'
 import * as React from 'react'
 import { useEffect, useState }  from 'react'
 
-// DataStore
-import { setConfig, getConfig } from '../datastore/datastore'
-
 // FluentUI
 import { ThemeProvider, PartialTheme } from '@fluentui/react'
 import { useBoolean } from '@fluentui/react-hooks'
@@ -24,10 +21,14 @@ import TextArea from './TextArea'
 import Footer from './Footer'
 import Settings from './Settings'
 
-import { createXmlData, saveSettings } from '../excelapi'
-
-
 import { useMonacoSettings } from '../hooks/useMonacoSettings'
+
+type MonacoSettings = {
+	language?: string,
+	fontFamily?: string,
+	fontSize?: number,
+	tabSize?: number
+}
 
 // ---------------------- Contents ----------------------
 const App = () => {
@@ -35,40 +36,53 @@ const App = () => {
 
   const { monacoSettings, changeMonacoSettings } = useMonacoSettings()
 
-  // Settings
-  const [theme, setTheme] = useState<string>('light')
+  
+  const [theme, setTheme] = useState<string>('')
 
+  // useEffect
   useEffect(() => {
-    //
-    // console.log(`[dev] hello ${theme} ${fontSize} ${fontFamily}`)
+
+    // テーマ設定を復元
+    const theme = Office.context.document.settings.get('theme') ? Office.context.document.settings.get('theme') : 'light'
+    setTheme(theme)
+
+    // Monacoの設定を復元
+    const language = Office.context.document.settings.get('language')
+    const fontFamily = Office.context.document.settings.get('fontFamily')
+    const fontSize = Office.context.document.settings.get('fontSize')
+    const tabSize = Office.context.document.settings.get('tabSize')
+
+    const presetSettings: MonacoSettings = {
+      language: language ? language : 'plainText',
+      fontFamily: fontFamily ? fontFamily : '"Source Code Pro", "Sawarabi Gothic", monospace',
+      fontSize: fontSize ? fontSize : 18,
+      tabSize: tabSize ? tabSize : 4
+    }
+    changeMonacoSettings(presetSettings)
+
   }, [])
 
   // サイドパネル
+  const closePanel = () => {
+    Office.context.document.settings.set('theme', theme)
+    Office.context.document.settings.set('language', monacoSettings.language)
+    Office.context.document.settings.set('fontFamily', monacoSettings.fontFamily)
+    Office.context.document.settings.set('fontSize', monacoSettings.fontSize)
+    Office.context.document.settings.set('tabSize', monacoSettings.tabSize)
+    dismissPanel()
+  }
   const [isOpen, { setTrue: openPanel, setFalse: dismissPanel }] = useBoolean(false)
   const onRenderFooterContent = React.useCallback(
     () => (
       <div>
-        <DefaultButton onClick={dismissPanel}>Close</DefaultButton>
+        <DefaultButton onClick={closePanel}>Close</DefaultButton>
       </div>
     ),
     [dismissPanel],
   )
 
-  const createSettingsTest = () => {
-    const sampleData = {
-      Data1: 'purin',
-      Data2: 'cake',
-      Data3: 'ice',
-      Data4: 'pan',
-      Data5: 'coffie'
-    }
-
-    createXmlData('MasterData', sampleData)
-  }
-
   return (
     <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
-      <DefaultButton onClick={createSettingsTest} >sample</DefaultButton>
       <TextArea 
         theme={theme}
         monacoSettings={monacoSettings}

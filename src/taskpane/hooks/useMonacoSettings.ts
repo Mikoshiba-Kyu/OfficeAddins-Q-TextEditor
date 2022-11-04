@@ -16,12 +16,7 @@ type MonacoSettings = {
 // ---------------------- Logic ----------------------
 export const useMonacoSettings = () => {
 
-  const [monacoSettings, setMonacoSettings] = useState<MonacoSettings>({
-    language: 'plainText',
-    fontFamily: '"Source Code Pro", "Sawarabi Gothic", monospace',
-    fontSize: 18,
-    tabSize: 4
-  })
+  const [monacoSettings, setMonacoSettings] = useState<MonacoSettings>({})
 
   const changeMonacoSettings = (params: MonacoSettings) => {
     setMonacoSettings({...monacoSettings, ...params})

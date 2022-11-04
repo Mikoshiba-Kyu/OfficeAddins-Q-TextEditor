@@ -40,24 +40,27 @@ export const createXmlData = (dataName: string, params: object): void => {
   })
 }
 
-export const createSettings = (): void => {
-  isLogging && console.log(`[Addins] [${moduleName}] start create.`)
+export const loadSettings = (dataName: string): void => {
+  isLogging && console.log(`[Addins] [${moduleName}] [loadSettings] start.`)
+
+  if (dataName === '') {
+    isLogging && console.log(`[Addins] [${moduleName}] [loadSettings] dataName is blank.`)
+    return
+  }
 
   Excel.run(async (context) => {
-    const originalXml = ("<Settings xmlns='http://schemas.microsoft.com/office/appforoffice/1.1'><Theme>John</Theme><Language>Hitomi</Language><FontFamily>Meiryo</FontFamily><FontSize>8</FontSize><TabSize>2</TabSize></Settings>")
-    const customXmlPart = context.workbook.customXmlParts.add(originalXml)
-    customXmlPart.load("id")
-    const xmlBlob = customXmlPart.getXml()
-    await context.sync()
-
-    //const previewXml = addLineBreaksToXML(xmlBlob.value)
-    //isLogging && console.log(`[Addins] [${moduleName}] ${previewXml}`)
-
     const settings = context.workbook.settings
-    settings.add("Settings", customXmlPart.id)
+    const trgSetting = settings.getItemOrNullObject(dataName).load()
     await context.sync()
 
-    isLogging && console.log(`[Addins] [${moduleName}] end create.`)
+    if (trgSetting) {
+      let customXmlPart = context.workbook.customXmlParts.getItem(trgSetting.value)
+      const xmlBlob = customXmlPart.getXml()
+
+      isLogging && console.log(`[Addins] [${moduleName}] [loadSettings] ${JSON.stringify(xmlBlob)}`)
+    } else {
+      isLogging && console.log(`[Addins] [${moduleName}] [loadSettings] end.`)
+    }
   })
 }
 
