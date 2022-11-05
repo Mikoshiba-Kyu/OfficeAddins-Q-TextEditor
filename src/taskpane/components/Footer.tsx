@@ -24,7 +24,7 @@ export interface Props {
 
 // ---------------------- Contents ----------------------
 const Footer = (props: Props) => {
-	isLogging && console.log(`[Addins] [${moduleName}] レンダリング`)
+	isLogging && console.log(`[Addins] [${moduleName}] Rendering.`)
 
 	// Styles definition
 	const stackStyles: IStackStyles = {

@@ -14,7 +14,7 @@ const isLogging = true
 const moduleName = 'TextArea.tsx'
 
 // ---------------------- Import ----------------------
-import * as React from "react";
+import * as React from "react"
 import Editor from "@monaco-editor/react"
 
 // ---------------------- Types ----------------------
@@ -33,7 +33,7 @@ export interface Props {
 
 // ---------------------- Contents ----------------------
 const TextArea = (props: Props) => {
-	isLogging && console.log(`[Addins] [${moduleName}] レンダリング`)
+	isLogging && console.log(`[Addins] [${moduleName}] Rendering.`)
 
 	function handleEditorWillMount(monaco) {
     	// monaco's instance
@@ -44,7 +44,7 @@ const TextArea = (props: Props) => {
 
 	function handleEditorValidation(markers) {
 		// model markers
-		markers.forEach((marker) => console.log("onValidate:", marker.message));
+		markers.forEach((marker) => console.log("onValidate:", marker.message))
 	}
 
 	return (
@@ -60,7 +60,7 @@ const TextArea = (props: Props) => {
 				options = {
 					{
 						fontFamily: props.monacoSettings.fontFamily,
-					 	fontSize: props.monacoSettings.fontSize,
+						fontSize: props.monacoSettings.fontSize,
 						tabSize: props.monacoSettings.tabSize
 					}
 				}

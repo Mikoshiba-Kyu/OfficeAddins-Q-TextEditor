@@ -3,32 +3,26 @@ const isLogging = true
 const moduleName = 'App.tsx'
 
 // ---------------------- Import ----------------------
-
-// React
 import * as React from 'react'
 import { useEffect, useState }  from 'react'
 
-// FluentUI
 import { ThemeProvider, PartialTheme } from '@fluentui/react'
 import { useBoolean } from '@fluentui/react-hooks'
 
-// ComponentFiles
+import { useMonacoSettings } from '../hooks/useMonacoSettings'
+
 import TextArea from './TextArea'
 import Footer from './Footer'
-
-import { useMonacoSettings } from '../hooks/useMonacoSettings'
 import SidePanel from './sidePanel'
 
 // ---------------------- Contents ----------------------
 const App = () => {
-  isLogging && console.log(`[Addins] [${moduleName}] レンダリング`)
+  isLogging && console.log(`[Addins] [${moduleName}] Rendering.`)
 
   const { monacoSettings, changeMonacoSettings } = useMonacoSettings()
-  isLogging && console.log(`[Addins] [${moduleName}] ${JSON.stringify(monacoSettings)}`)
   
   const [theme, setTheme] = useState<string>(Office.context.document.settings.get('theme') ? Office.context.document.settings.get('theme') : 'light')
 
-  // SidePane
   const [isOpen, { setTrue: openPanel, setFalse: dismissPanel }] = useBoolean(false)
 
   // useEffect

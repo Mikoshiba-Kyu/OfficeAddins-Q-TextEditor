@@ -1,10 +1,17 @@
+// ---------------------- Dev Settings ----------------------
+const isLogging = true
+const moduleName = 'Spacer.tsx'
+
+// ---------------------- Import ----------------------
 import * as React from 'react'
 
+// ---------------------- Props ----------------------
 export interface Props {
 	size: string
     horizontal?: boolean
 }
 
+// ---------------------- Contents ----------------------
 export const Spacer = (props: Props) => {
     return (
         <div

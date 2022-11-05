@@ -31,7 +31,7 @@ export interface Props {
 
 // ---------------------- Contents ----------------------
 const SidePanel = (props: Props) => {
-    isLogging && console.log(`[Addins] [${moduleName}] レンダリング`)
+    isLogging && console.log(`[Addins] [${moduleName}] Rendering.`)
 
 	// テーマ
 	const [selectedTheme, setSelectedTheme] = React.useState<string | undefined>(props.theme)

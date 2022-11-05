@@ -34,6 +34,7 @@ export const useMonacoSettings = () => {
 
   const changeMonacoSettings = (params: MonacoSettings) => {
     setMonacoSettings({...monacoSettings, ...params})
+    isLogging && console.log(`[Addins] [${moduleName}] [changeMonacoSettings] params are ${JSON.stringify(params)}`)
   }
 
   return {monacoSettings, changeMonacoSettings}
