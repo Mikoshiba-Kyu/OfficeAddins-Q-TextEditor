@@ -1,13 +1,15 @@
 // ---------------------- Dev Settings ----------------------
 const isLogging = true
-const moduleName = 'Settings.tsx'
+const moduleName = 'SidePanel.tsx'
 
 // ---------------------- Import ----------------------
 import * as React from 'react'
+import { Panel } from '@fluentui/react/lib/Panel'
+import { Spacer } from './Spacer'
+import { BaseButton, DefaultButton } from '@fluentui/react/lib/Button'
+import { Slider } from '@fluentui/react'
 import { Dropdown, IDropdownOption, IDropdownStyles } from '@fluentui/react/lib/Dropdown'
 import { ChoiceGroup, IChoiceGroupOption } from '@fluentui/react/lib/ChoiceGroup'
-import { Slider } from '@fluentui/react'
-import { Spacer } from './Spacer'
 
 // ---------------------- Types ----------------------
 type MonacoSettings = {
@@ -19,15 +21,17 @@ type MonacoSettings = {
 
 // ---------------------- Props ----------------------
 export interface Props {
-	theme: string
-	setTheme
+    theme: string
+	setTheme: Function
 	monacoSettings: MonacoSettings
 	changeMonacoSettings: Function
+	isOpen: boolean
+	dismissPanel: { (event: React.MouseEvent<HTMLDivElement | HTMLAnchorElement | HTMLButtonElement | HTMLSpanElement | BaseButton, MouseEvent>): void; (ev?: React.SyntheticEvent<HTMLElement, Event> | KeyboardEvent): void }
 }
 
 // ---------------------- Contents ----------------------
-const Settings = (props: Props) => {
-	isLogging && console.log(`[Addins] [${moduleName}] レンダリング`)
+const SidePanel = (props: Props) => {
+    isLogging && console.log(`[Addins] [${moduleName}] レンダリング`)
 
 	// テーマ
 	const [selectedTheme, setSelectedTheme] = React.useState<string | undefined>(props.theme)
@@ -64,8 +68,44 @@ const Settings = (props: Props) => {
 		props.changeMonacoSettings({ tabSize: value })
 	}
 
+    const closePanel = () => {
+
+        Office.context.document.settings.set('theme', props.theme)
+        Office.context.document.settings.set('language', props.monacoSettings.language)
+        Office.context.document.settings.set('fontFamily', props.monacoSettings.fontFamily)
+        Office.context.document.settings.set('fontSize', props.monacoSettings.fontSize)
+        Office.context.document.settings.set('tabSize', props.monacoSettings.tabSize)
+
+        Office.context.document.settings.saveAsync((asyncResult) => {
+        if (asyncResult.status == Office.AsyncResultStatus.Failed) {
+            isLogging && console.log(`[Addins] [${moduleName}] Save Settings is failed.`)
+        } else {
+            isLogging && console.log(`[Addins] [${moduleName}] Save Settings is done.`)
+        }
+        })
+
+
+        props.dismissPanel()
+    }
+
+	const onRenderFooterContent = React.useCallback(
+		() => (
+		<div>
+			<DefaultButton onClick={closePanel}>Close</DefaultButton>
+		</div>
+		),
+		[props.dismissPanel],
+	)
+
 	return (
-		<>
+		<Panel
+			isOpen={props.isOpen}
+			onDismiss={props.dismissPanel}
+			headerText="設定"
+			closeButtonAriaLabel="Close"
+			onRenderFooterContent={onRenderFooterContent}
+			isFooterAtBottom={true}
+        >
 			<Spacer size='2rem'></Spacer>
 			<ChoiceGroup 
 				defaultSelectedKey={props.theme}
@@ -116,11 +156,12 @@ const Settings = (props: Props) => {
 				showValue
 				snapToStep
 			/>
-		</>
+		</Panel>
 	)
 }
 
-export default Settings
+export default SidePanel
+
 
 // ----------------- テーマ -----------------
 const themeOptions: IChoiceGroupOption[] = [
