@@ -26,7 +26,7 @@ const App = () => {
   const { monacoSettings, changeMonacoSettings } = useMonacoSettings()
   isLogging && console.log(`[Addins] [${moduleName}] ${JSON.stringify(monacoSettings)}`)
   
-  const [theme, setTheme] = useState<string>('')
+  const [theme, setTheme] = useState<string>(Office.context.document.settings.get('theme') ? Office.context.document.settings.get('theme') : 'light')
 
   // SidePane
   const [isOpen, { setTrue: openPanel, setFalse: dismissPanel }] = useBoolean(false)
@@ -34,9 +34,9 @@ const App = () => {
   // useEffect
   useEffect(() => {
 
-    // テーマ設定を復元
-    const theme = Office.context.document.settings.get('theme') ? Office.context.document.settings.get('theme') : 'light'
-    setTheme(theme)
+    // TODO エディタの内容保存のしくみ作成後、ここで読み出しを行う
+    // const body = Office.context.document.settings.get('body') ? Office.context.document.settings.get('body') : ''
+    // ...
 
   }, [])
 

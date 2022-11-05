@@ -36,62 +36,97 @@ const SidePanel = (props: Props) => {
 	// テーマ
 	const [selectedTheme, setSelectedTheme] = React.useState<string | undefined>(props.theme)
 	const onThemeChange = React.useCallback((_event: React.SyntheticEvent<HTMLElement>, option: IChoiceGroupOption) => {
-		setSelectedTheme(option.key)
-		props.setTheme(option.key)
+		const changedTheme = option.key
+
+		setSelectedTheme(changedTheme)
+		props.setTheme(changedTheme)
+		Office.context.document.settings.set('theme', changedTheme)
+		
+		Office.context.document.settings.saveAsync((asyncResult) => {
+			if (asyncResult.status == Office.AsyncResultStatus.Failed) {
+				isLogging && console.log(`[Addins] [${moduleName}] Save Failed : Theme "${changedTheme}"`)
+			} else {
+				isLogging && console.log(`[Addins] [${moduleName}] Save Doned : Theme "${changedTheme}"`)
+			}
+		})
 	}, [])
 
 	// 言語
 	const [selectedLanguage, setSelectedLanguage] = React.useState<IDropdownOption>()
 	const onLanguageChange = (_event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void => {
 		setSelectedLanguage(item)
-		props.changeMonacoSettings({ language: item.key.toString() })
+
+		const changedLanguage = item.key.toString()
+		props.changeMonacoSettings({ language: changedLanguage })
+		Office.context.document.settings.set('language', changedLanguage)
+
+		Office.context.document.settings.saveAsync((asyncResult) => {
+			if (asyncResult.status == Office.AsyncResultStatus.Failed) {
+				isLogging && console.log(`[Addins] [${moduleName}] Save Failed : Language "${changedLanguage}"`)
+			} else {
+				isLogging && console.log(`[Addins] [${moduleName}] Save Doned : Language "${changedLanguage}"`)
+			}
+		})
 	}
 
 	// フォントファミリー
 	const [selectedFontFamily, setSelectedFontFamily] = React.useState<IDropdownOption>()
 	const onFontFamilyChange = (_event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void => {
 		setSelectedFontFamily(item)
-		props.changeMonacoSettings({ fontFamily: item.key.toString() })
+
+		const changedFontFamily = item.key.toString()
+		props.changeMonacoSettings({ fontFamily: changedFontFamily })
+		Office.context.document.settings.set('fontFamily', changedFontFamily)
+
+		Office.context.document.settings.saveAsync((asyncResult) => {
+			if (asyncResult.status == Office.AsyncResultStatus.Failed) {
+				isLogging && console.log(`[Addins] [${moduleName}] Save Failed : FontFamily "${changedFontFamily}"`)
+			} else {
+				isLogging && console.log(`[Addins] [${moduleName}] Save Doned : FontFamily "${changedFontFamily}"`)
+			}
+		})
 	}
 
 	// フォントサイズ
-	const [inputFontSize, setInputFontSize] = React.useState(props.monacoSettings.fontSize);
+	const [inputFontSize, setInputFontSize] = React.useState(props.monacoSettings.fontSize)
 	const onFontSizeChange = (value: number) => {
 		setInputFontSize(value)
 		props.changeMonacoSettings({ fontSize: value })
+		Office.context.document.settings.set('fontSize', value)
+
+		Office.context.document.settings.saveAsync((asyncResult) => {
+			if (asyncResult.status == Office.AsyncResultStatus.Failed) {
+				isLogging && console.log(`[Addins] [${moduleName}] Save Failed : FontSize ${value}`)
+			} else {
+				isLogging && console.log(`[Addins] [${moduleName}] Save Doned : FontSize ${value}`)
+			}
+		})
 	}
 
 	// タブサイズ
-	const [inputTabSize, setInputTabSize] = React.useState(props.monacoSettings.tabSize);
+	const [inputTabSize, setInputTabSize] = React.useState(props.monacoSettings.tabSize)
 	const onTabSizeChange = (value: number) => {
 		setInputTabSize(value)
 		props.changeMonacoSettings({ tabSize: value })
+		Office.context.document.settings.set('tabSize', value)
+
+		;(async () => {
+			Office.context.document.settings.saveAsync((asyncResult) => {
+				if (asyncResult.status == Office.AsyncResultStatus.Failed) {
+					isLogging && console.log(`[Addins] [${moduleName}] Save Failed : TabSize ${value}`)
+				} else {
+					isLogging && console.log(`[Addins] [${moduleName}] Save Doned : TabSize ${value}`)
+				}
+			})
+		})()
+
+		
 	}
-
-    const closePanel = () => {
-
-        Office.context.document.settings.set('theme', props.theme)
-        Office.context.document.settings.set('language', props.monacoSettings.language)
-        Office.context.document.settings.set('fontFamily', props.monacoSettings.fontFamily)
-        Office.context.document.settings.set('fontSize', props.monacoSettings.fontSize)
-        Office.context.document.settings.set('tabSize', props.monacoSettings.tabSize)
-
-        Office.context.document.settings.saveAsync((asyncResult) => {
-        if (asyncResult.status == Office.AsyncResultStatus.Failed) {
-            isLogging && console.log(`[Addins] [${moduleName}] Save Settings is failed.`)
-        } else {
-            isLogging && console.log(`[Addins] [${moduleName}] Save Settings is done.`)
-        }
-        })
-
-
-        props.dismissPanel()
-    }
 
 	const onRenderFooterContent = React.useCallback(
 		() => (
 		<div>
-			<DefaultButton onClick={closePanel}>Close</DefaultButton>
+			<DefaultButton onClick={props.dismissPanel}>Close</DefaultButton>
 		</div>
 		),
 		[props.dismissPanel],
