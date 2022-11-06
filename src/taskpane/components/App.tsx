@@ -4,11 +4,12 @@ const moduleName = 'App.tsx'
 
 // ---------------------- Import ----------------------
 import * as React from 'react'
-import { useEffect, useState }  from 'react'
+import { useEffect }  from 'react'
 
-import { ThemeProvider, PartialTheme } from '@fluentui/react'
+import { ThemeProvider } from '@fluentui/react'
 import { useBoolean } from '@fluentui/react-hooks'
 
+import { useTheme } from '../hooks/useTheme'
 import { useMonacoSettings } from '../hooks/useMonacoSettings'
 
 import TextArea from './TextArea'
@@ -20,8 +21,7 @@ const App = () => {
   isLogging && console.log(`[Addins] [${moduleName}] Rendering.`)
 
   const { monacoSettings, changeMonacoSettings } = useMonacoSettings()
-  
-  const [theme, setTheme] = useState<string>(Office.context.document.settings.get('theme') ? Office.context.document.settings.get('theme') : 'light')
+  const { theme, setTheme, lightTheme, darkTheme } = useTheme()
 
   const [isOpen, { setTrue: openPanel, setFalse: dismissPanel }] = useBoolean(false)
 
@@ -57,18 +57,3 @@ const App = () => {
   )
 }
 export default App
-
-// ---------------------- Logic ----------------------
-const lightTheme: PartialTheme = {
-  semanticColors: {
-    bodyBackground: '#FAFAFA',
-    bodyText: '#111111',
-  },
-}
-
-const darkTheme: PartialTheme = {
-  semanticColors: {
-    bodyBackground: '#111111',
-    bodyText: '#FAFAFA',
-  },
-}
